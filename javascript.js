@@ -1,13 +1,17 @@
 const playsArray = ["rock", "paper", "scissors"];
-//const playerSelection = playerPlay();
-//const computerSelection = computerPlay();
-let playerScore = 0;
-let computerScore = 0;
+function game() {
+    let playerScore = 0;
+    let computerScore = 0;
+    let gameWinner = ""
+}
 
+
+// computer play function
 function computerPlay() {
     return playsArray[Math.floor(Math.random()*playsArray.length)];
 };
 
+/* player play function
 function playerPlay() {
     let input = prompt("type Rock, Paper, or Scissors");
     while (input == null) {
@@ -15,12 +19,27 @@ function playerPlay() {
     }
     input = input.toLowerCase();
     return input
-};
+}; */
 
 
 
-function playRound() {
-    let playerSelection = playerPlay();
+// Add event listeners to the new buttons/run round on click/track and end game
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        playerSelection = button.id;
+        const computerSelection = computerPlay();
+        battleWinText.textContent = (playRound(playerSelection, computerSelection));
+        playerWinText.textContent = "Player Score: " + playerScore;
+        computerWinText.textContent = "Computer Score: " + computerScore;
+        endGame();
+    })
+})
+
+
+// play each round and determine winner
+function playRound(playerSelection, computerSelection) {
+    // (not needed?) let playerSelection = playerPlay();
     let computerSelection = computerPlay();
     if (computerSelection === playerSelection) {
         console.log("You Tied!")
@@ -47,18 +66,75 @@ function playRound() {
     };    
 };
 
-function game() {
-    playerScore = 0;
-    computerScore = 0;
+// create DOM div for results
+const container = document.querySelector("#container")
+const resultsDiv = document.createElement("div");
+resultsDiv.style.marginTop = "20px";
+container.appendChild(resultsDiv);
 
-    while (playerScore < 3 && computerScore < 3) {
-        playRound();
-    }
-    if (playerScore >= 3) {
-        console.log("You win! Reload page to play again.")
-    } else if (computerScore >= 3) {
-        console.log("You lost! Reload page to play again.")
-    }
+// create player win tracking DOM
+const playerWinText = document.createElement("p");
+playerWinText.style.color = "blue";
+playerWinText.textContent = "Player Score:" + playerScore;
+resultsDiv.appendChild(playerWinText);
+
+// create computer win tracking DOM
+const computerWinText = document.createElement("p");
+computerWinText.style.color = "blue";
+computerWinText.textContent = "Computer Score:" + computerScore;
+resultsDiv.appendChild(computerWinText);
+
+
+// create battle win text DOM
+const battleWinText = document.createElement("p");
+battleWinText.style.color = "black";
+resultsDiv.appendChild(battleWinText)
+
+// create game win text DOM
+const gameWinText = document.createElement("p");
+gameWinText.style.color = "orange";
+gameWinText.textContent = "You win! Click play again to play again"
+resultsDiv.appendChild(gameWintext);
+
+// determine winner-- first to 5 points
+ function endGame() {
+     if (playerScore == 5) {
+         gameWinner = "You win! Click play again to play again."
+         gameWinText.textContent = gameWinner;
+
+         // disable buttons
+         document.getElementById("rock").disabled = true;
+         document.getElementById("paper").disabled = true;
+         document.getElementById("scissors").disabled = true;
+
+        //create new DOM button to replay
+        const playAgainButton = document.createElement("button");
+        playAgainButton.textContent = "Play Again!";
+        resultsDiv.appendChild(playAgainButton);
+
+        //if clicked, reload page
+        playAgainButton.addEventListener("click", () => {
+            location.reload();
+        });
+     } else if (computerScore == 5) {
+        gameWinner = "The Computer won! Play again!"
+        gameWinText.textContent = gameWinner;
+
+        // disable buttons
+        document.getElementById("rock").disabled = true;
+        document.getElementById("paper").disabled = true;
+        document.getElementById("scissors").disabled = true;
+
+       //create new DOM button to replay
+       const playAgainButton = document.createElement("button");
+       playAgainButton.textContent = "Play Again!";
+       resultsDiv.appendChild(playAgainButton);
+
+       //if clicked, reload page
+       playAgainButton.addEventListener("click", () => {
+           location.reload();
+       });
+     }
 }
 
-game()
+game();
