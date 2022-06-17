@@ -1,4 +1,7 @@
 const playsArray = ["rock", "paper", "scissors"];
+let playerScore = 0;
+let computerScore = 0;
+
 function game() {
     let playerScore = 0;
     let computerScore = 0;
@@ -27,7 +30,7 @@ function playerPlay() {
 const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
-        playerSelection = button.id;
+        playerSelection = button.className;
         const computerSelection = computerPlay();
         battleWinText.textContent = (playRound(playerSelection, computerSelection));
         playerWinText.textContent = "Player Score: " + playerScore;
@@ -39,30 +42,28 @@ buttons.forEach((button) => {
 
 // play each round and determine winner
 function playRound(playerSelection, computerSelection) {
-    // (not needed?) let playerSelection = playerPlay();
-    let computerSelection = computerPlay();
     if (computerSelection === playerSelection) {
-        console.log("You Tied!")
+        return "You Tied!"
     } else if (computerSelection === "rock" && playerSelection === "scissors") {
         computerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you lose! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you lose!`;
     } else if (computerSelection === "rock" && playerSelection === "paper") {
         playerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you win! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you win!`;
     } else if (computerSelection === "paper" && playerSelection === "rock") {
         computerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you lose! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you lose!`
     } else if (computerSelection === "paper" && playerSelection === "scissors") {
         playerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you win! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you win!`
     } else if (computerSelection === "scissors" && playerSelection === "paper") {
         computerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you lose! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you lose!`
     } else if (computerSelection === "scissors" && playerSelection === "rock") {
         playerScore++;
-        console.log(`Computer played ${computerSelection}, you played ${playerSelection}...you win! Computer: ${computerScore} - You: ${playerScore}`)
+        return `Computer played ${computerSelection}, you played ${playerSelection}...you win!`
     } else {
-        console.log("There was an error")
+        return "There was an error"
     };    
 };
 
@@ -88,19 +89,18 @@ resultsDiv.appendChild(computerWinText);
 // create battle win text DOM
 const battleWinText = document.createElement("p");
 battleWinText.style.color = "black";
+battleWinText.textContent = ""
 resultsDiv.appendChild(battleWinText)
 
-// create game win text DOM
-const gameWinText = document.createElement("p");
-gameWinText.style.color = "orange";
-gameWinText.textContent = "You win! Click play again to play again"
-resultsDiv.appendChild(gameWintext);
 
 // determine winner-- first to 5 points
  function endGame() {
      if (playerScore == 5) {
-         gameWinner = "You win! Click play again to play again."
-         gameWinText.textContent = gameWinner;
+        // create game win text DOM
+        const gameWinText = document.createElement("p");
+        gameWinText.style.color = "orange";
+        gameWinText.textContent = "You win! Click play again to play again";
+        resultsDiv.appendChild(gameWinText);
 
          // disable buttons
          document.getElementById("rock").disabled = true;
@@ -117,8 +117,11 @@ resultsDiv.appendChild(gameWintext);
             location.reload();
         });
      } else if (computerScore == 5) {
-        gameWinner = "The Computer won! Play again!"
-        gameWinText.textContent = gameWinner;
+                // create game win text DOM
+            const gameWinText = document.createElement("p");
+            gameWinText.style.color = "orange";
+            gameWinText.textContent = "You lose! Click play again to play again";
+            resultsDiv.appendChild(gameWinText);
 
         // disable buttons
         document.getElementById("rock").disabled = true;
